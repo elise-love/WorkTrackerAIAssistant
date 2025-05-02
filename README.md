@@ -36,14 +36,15 @@ python -m elfie        # launches the UI
 ##Project Structure
 elfie/
 ├── src/
-│ └── elfie/
-│ ├── main.py
-│ ├── ui/
-│ ├── core/
-│ └── config.py
+│   └── elfie/
+│       ├── __main__.py
+│       ├── ui/
+│       ├── core/
+│       └── config.py
 ├── tests/
 ├── data/
 ├── docs/
-│ └── images/
+│   └── images/
 ├── .env.example
 └── README.md
+
