@@ -1,8 +1,8 @@
-# Elfie ‑ Work‑Tracker AI Assistant 🧚🏻‍♀️
-*A 10‑second journal to keep my daily work on track.*
+# Elfie ‑ Work‑Tracker AI Assistant 🧚🏻‍♀️💜💐
+*A 10‑second journal to keep my daily work on track.*💐
 
-## Elevator Pitch
-✨ Elfie is a lightweight desktop AI assistant that can save ur time planning and logging stuff everyday.
+## ✨Elevator Pitch
+Elfie is a lightweight desktop AI assistant that can save ur time planning and logging stuff everyday.
 
 
 ##  Project Stage & Roadmap
