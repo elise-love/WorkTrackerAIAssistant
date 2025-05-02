@@ -34,6 +34,7 @@ python -m elfie        # launches the UI
 ```
 
 ##Project Structure
+
 elfie/
 ├─ src/
 │  └─ elfie/
