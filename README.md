@@ -5,7 +5,7 @@
 Elfie is a lightweight desktop AI assistant that can save ur time planning and logging stuff everyday.
 
 
-##  Project Stage & Roadmap⸜(｡˃ ᵕ ˂ )⸝♡
+##  Project Stage & Roadmap (˶˃⤙˂˶)
 |     Stage     |                  Goal                   |      Status    |
 |---------------|-----------------------------------------|----------------|
 | **Stage 1**   | Minimal UI: send prompt ➜ get reply    | ⏳ In progress |
