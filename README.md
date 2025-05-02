@@ -31,3 +31,20 @@ python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\act
 pip install -r requirements.txt
 cp .env.example .env   # put your OPENAI_API_KEY inside
 python -m elfie        # launches the UI
+```
+
+##Project Structure
+elfie/
+├─ src/
+│  └─ elfie/
+│     ├─ __main__.py      
+│     ├─ ui/              
+│     ├─ core/            
+│     └─ config.py        
+├─ tests/
+├─ data/               
+├─ docs/
+│  └─ images/
+├─ .env.example
+└─ README.md
+
