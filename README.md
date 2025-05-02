@@ -1,14 +1,33 @@
-# WorkTrackerAIAssistant
-A project to keep my works in line
+# Elfie ‑ Work‑Tracker AI Assistant 🧚🏻‍♀️
+*A 10‑second journal to keep my daily work on track.*
 
-So, I want to update my duties and work each day.
-More importantly, keep track of my work of the day so I would know whether I had a productive day.
+## Elevator Pitch
+✨ Elfie is a lightweight desktop AI assistant that can save ur time planning and logging stuff everyday.
 
-Ofc I have tried apps or website like notions to help me before,
-but those are not efficient for me and I didn't want to waste a lot of time to plan stuff and record stuff and arrange my calender (which I found really irritaing).
 
-So this WorkTrackerAssistant would be custom-made for my wills and habbits.
+##  Project Stage & Roadmap
+|     Stage     |                  Goal                   |      Status    |
+|---------------|-----------------------------------------|----------------|
+| **Stage 1**   | Minimal UI: send prompt ➜ get reply    | ⏳ In progress |
+| **Stage 2**   | Add templates (to‑do list, work log)    |       🔜       |
+| **Stage 2.5** | Decide log storage (SQLite vs. JSON)    |       🔜       |
+| **Stage 3**   | Model persona, command stability tests  |       🔜       |
+| **Stage 4**   | History viewer (per day) | 2025‑07‑25   |       🔜       |
+| **Stage 5**   | Extras: token meter, UI themes          |       🔜       |
 
-It doesen't have an official name yet, let's call it Elfie for now!
 
-The AI part uses OpenAI's api.
+## ⚙️ Tech Stack & Constraints
+- **Runtime**  Python 3.11 (64‑bit)  
+- **UI**  PyQt5 5.15 (pre‑installed on target PCs)  
+- **AI**  OpenAI Chat Completions API (key via `.env`)  
+- **Platform**  Windows 10+ | offline‑first (only API calls go online)  
+- **License**  MIT
+
+## 🚀 Quick Start
+```bash
+git clone https://github.com/yourname/elfie.git
+cd elfie
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env   # put your OPENAI_API_KEY inside
+python -m elfie        # launches the UI
