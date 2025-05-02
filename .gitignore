@@ -1,18 +1,12 @@
-########################################
 1. OS-level
-########################################
 .DS_Store
 Thumbs.db
 
-########################################
 2.Editor /IDE
-########################################
 .idea/
 .vscode/
 
-########################################
 3. Python
-########################################
 #byte-code & virtual env
 __pycache__/
 *.py[cod]
@@ -23,9 +17,7 @@ build/
 dist/
 *.egg-info/
 
-########################################
 4.Node/React
-########################################
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -34,9 +26,7 @@ coverage/
 #React static buld (if created)
 build/
 
-########################################
 5. Misc
-########################################
 #Remove OS-generated archive attr files
 *.zip@
 #Ignore local test data
