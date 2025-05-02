@@ -5,7 +5,7 @@
 Elfie is a lightweight desktop AI assistant that can save ur time planning and logging stuff everyday.
 
 
-##  Project Stage & Roadmap
+##  Project Stage & Roadmap⸜(｡˃ ᵕ ˂ )⸝♡
 |     Stage     |                  Goal                   |      Status    |
 |---------------|-----------------------------------------|----------------|
 | **Stage 1**   | Minimal UI: send prompt ➜ get reply    | ⏳ In progress |
@@ -33,7 +33,7 @@ cp .env.example .env   # put your OPENAI_API_KEY inside
 python -m elfie        # launches the UI
 ```
 
-##Project Structure
+##Project Structure🌷🌷🌷
 ```
 ai-desktop-assistant/
 │
