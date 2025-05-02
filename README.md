@@ -35,17 +35,26 @@ python -m elfie        # launches the UI
 
 ##Project Structure
 ```
-elfie/
-├── src/
-│   └── elfie/
-│       ├── __main__.py
-│       ├── ui/
-│       ├── core/
-│       └── config.py
-├── tests/
-├── data/
-├── docs/
-│   └── images/
-├── .env.example
-└── README.md
+ai-desktop-assistant/
+│
+├─ .gitignore
+├─ README.md         
+├─ requirements.txt
+├─ .env.example      
+│
+├─ src/
+│   └─ assistant/     ← import as 'assistant.*'
+│       ├─ __init__.py
+│       ├─ __main__.py  
+│       ├─ core/
+│       │     ├─ chat_client.py   
+│       │     └─ conversation.py  
+│       ├─ ui/
+│       │     ├─ main_window.py
+│       │     └─ components/…      
+│       └─ config.py
+│
+├─ tests/             ← pytest tests live here
+├─ data/              ← sample logs, icons, model prompts
+└─ docs/              ← architecture diagrams, future ADRs
 ```
