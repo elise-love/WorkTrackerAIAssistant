@@ -10,3 +10,5 @@ but those are not efficient for me and I didn't want to waste a lot of time to p
 So this WorkTrackerAssistant would be custom-made for my wills and habbits.
 
 It doesen't have an official name yet, let's call it Elfie for now!
+
+The AI part uses OpenAI's api.
