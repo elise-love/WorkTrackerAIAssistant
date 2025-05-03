@@ -1,34 +1,53 @@
 ﻿"""
-讀 .env、集中設定
+config.py —— 讀取 .env 與集中設定
+
+1. 透過 python‑dotenv 自動載入最外層 `.env`
+2. 把必要的環境變數拉成全域常數
+3. 若缺少必要變數，提早丟錯避免執行期才炸
 """
-#config.py
-from pathlib import Path # Pathlib 是 Python 3.4 之後的標準庫，提供了更方便的路徑操作
-from dotenv import load_dotenv # python-dotenv 是一個用於讀取 .env 文件的庫, can read variables from .env file
-import os 
 
-"""
-# 取得目前這個檔案（config.py）的絕對路徑，再往上一層得到專案根目錄
- __file__  → 目前檔案路徑
-resolve()  → 轉成絕對路徑
-parent     → 取得上一層資料夾
-"""
-ROOT = Path(__file__).resolve().parent
+from pathlib import Path
+import os
 
-# 把專案根目錄再往上一層，找到 .env 檔（通常放在專案最外層）
-# 之後將其中的變數載入到系統環境變數中
-load_dotenv(ROOT/".."/".env")
+# ----------------------------------------
+# 1. 自動載入 .env
+# ----------------------------------------
+try:
+    from dotenv import load_dotenv
+except ImportError as e:  # 還沒安裝 python-dotenv
+    raise ImportError("請先執行 `pip install python-dotenv`") from e
 
-# 讀取 .env 裡面的 OPENAI_API_KEY
-# 如果 .env 沒有這個欄位，會得到 None
-OPEN_API_KEY = os.getenv("OPEN_API_KEY")
+# 這支檔案位於 src/assistant/config.py
+# 專案根目錄通常是 src 的上一層，再往上一層才是 repo 最外層
+BASE_DIR = Path(__file__).resolve().parents[2]   # WorkTrackerAIAssistant/
+ENV_PATH = BASE_DIR / ".env"
 
-OPEN_ORG_ID = os.getenv("OPEN_ORG_ID","")
-MODEL_DEFAULT = "gpt-4o"
+load_dotenv(ENV_PATH)  # 沒找到 .env 也不會報錯；找到了就載
 
-# 設定 API 呼叫逾時秒數
-TIMEOUT = 30
+# ----------------------------------------
+# 2. 讀環境變數 → 全域常數
+# ----------------------------------------
+def _need(name: str) -> str:
+    """沒有就直接 raise ValueError，讓錯誤在一開始就顯示"""
+    value = os.getenv(name)
+    if not value:
+        raise ValueError(f"環境變數 {name} 尚未設定，請在 .env 加上它。")
+    return value
 
-SYSTEM_PROMPT= (
-    "You are Elfie my personal assistant."
-    "You will act like a intresting friend and supporrtive lover innstead of an obedient robot"
-    )
+# ★ 之前的 ImportError 就是因為變數名打錯，這裡改回 OPENAI_API_KEY
+OPENAI_API_KEY = _need("OPENAI_API_KEY")
+
+# 非必填 → 用 os.getenv，沒設定給空字串
+OPENAI_ORG_ID  = os.getenv("OPENAI_ORG_ID", "")
+
+# 預設模型，可在 .env 用 MODEL_DEFAULT 覆寫
+MODEL_DEFAULT  = os.getenv("MODEL_DEFAULT", "gpt-4o")
+
+# API 逾時秒數；可自行在 .env 覆寫
+TIMEOUT        = int(os.getenv("OPENAI_TIMEOUT", "30"))
+
+# 系統提示，可直接寫在這，也可改成讀檔
+SYSTEM_PROMPT = (
+    "You are Elfie, my personal assistant. "
+    "Act like an interesting friend and supportive lover instead of an obedient robot."
+)
