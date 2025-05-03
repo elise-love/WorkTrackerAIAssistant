@@ -1,6 +1,7 @@
 ﻿"""
 讀 .env、集中設定
 """
+#config.py
 from pathlib import Path # Pathlib 是 Python 3.4 之後的標準庫，提供了更方便的路徑操作
 from dotenv import load_dotenv # python-dotenv 是一個用於讀取 .env 文件的庫, can read variables from .env file
 import os 
