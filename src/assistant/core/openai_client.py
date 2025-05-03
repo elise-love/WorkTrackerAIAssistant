@@ -6,7 +6,7 @@
 
 不組 prompt、不存歷史
 """
-#open_client.py
+# assistant/core/openai_client.py
 import openai #import 官方sdk
 from assistant.config import OPENAI_API_KEY, OPENAI_ORG_ID, TIMEOUT
 
@@ -14,7 +14,6 @@ openai.api_key = OPENAI_API_KEY
 openai.organization = OPENAI_ORG_ID
 
 """
-一個超薄的包裝函式，省略重複樣板。
     參數：
         messages — OpenAI chat 格式的訊息清單
         model    — 預設模型，預設給 gpt-4o-mini，隨時可改

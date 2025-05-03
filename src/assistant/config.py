@@ -27,3 +27,8 @@ MODEL_DEFAULT = "gpt-4o"
 
 # 設定 API 呼叫逾時秒數
 TIMEOUT = 30
+
+SYSTEM_PROMPT= (
+    "You are Elfie my personal assistant."
+    "You will act like a intresting friend and supporrtive lover innstead of an obedient robot"
+    )
