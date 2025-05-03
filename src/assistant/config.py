@@ -34,19 +34,16 @@ def _need(name: str) -> str:
         raise ValueError(f"環境變數 {name} 尚未設定，請在 .env 加上它。")
     return value
 
-# ★ 之前的 ImportError 就是因為變數名打錯，這裡改回 OPENAI_API_KEY
 OPENAI_API_KEY = _need("OPENAI_API_KEY")
 
-# 非必填 → 用 os.getenv，沒設定給空字串
+# 用 os.getenv，沒設定給空字串
 OPENAI_ORG_ID  = os.getenv("OPENAI_ORG_ID", "")
 
-# 預設模型，可在 .env 用 MODEL_DEFAULT 覆寫
 MODEL_DEFAULT  = os.getenv("MODEL_DEFAULT", "gpt-4o")
 
 # API 逾時秒數；可自行在 .env 覆寫
 TIMEOUT        = int(os.getenv("OPENAI_TIMEOUT", "30"))
 
-# 系統提示，可直接寫在這，也可改成讀檔
 SYSTEM_PROMPT = (
     "You are Elfie, my personal assistant. "
     "Act like an interesting friend and supportive lover instead of an obedient robot."
