@@ -48,7 +48,8 @@ ai-desktop-assistant/
 │       ├─ __main__.py  
 │       ├─ core/
 │       │     ├─ chat_client.py   
-│       │     └─ conversation.py  
+│       │     └─ conversation.py
+│       │     └─ openai_client.py  
 │       ├─ ui/
 │       │     ├─ main_window.py
 │       │     └─ components/…      
