@@ -8,8 +8,8 @@ Elfie is a lightweight desktop AI assistant that can save ur time planning and l
 ##  Project Stage & Roadmap (˶˃⤙˂˶)
 |     Stage     |                  Goal                   |      Status    |
 |---------------|-----------------------------------------|----------------|
-| **Stage 1**   | Minimal UI: send prompt ➜ get reply    | ⏳ In progress |
-| **Stage 2**   | Write Ui, Add templates                 |       🔜       |
+| **Stage 1**   | Minimal UI: send prompt ➜ get reply    |        ✔️       |
+| **Stage 2**   | Write Ui, Add templates                 |⏳ In progress  |
 | **Stage 2.5** | Decide log storage (SQLite vs. JSON)    |       🔜       |
 | **Stage 3**   | Model pcersona, command stability tests |       🔜       |
 | **Stage 4**   | History viewer (per day) | 2025‑07‑25   |       🔜       |
