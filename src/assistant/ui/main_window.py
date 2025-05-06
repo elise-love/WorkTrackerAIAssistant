@@ -8,32 +8,32 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        #initial window settings
-        self.full_size = QSize(500,700)
-        self.icon_size = QSize(200,200)
-        self.minimize_block = False
-
-        self.setFixedSize(self.full_size)
+        #window settings
+        self.setFixedSize(500,700)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setCentralWidget(QWidget()) #base widget
 
         #color block settings
-        self.color_block = QWidget(self)
-        self.color_block.setFixedSize(self.full_size)
+        color_block = QWidget(self)
+        color_block.setFixedSize(500,700)
         #color_block.setGeometry(50 ,100, 300 ,400)
-        self.color_block.setStyleSheet("""
+        color_block.setStyleSheet("""
             background-color: rgba(202, 192, 237, 206);
             border-radius: 20px;
         """)
+
+        self.color_block = color_block
+
+        self.minimized = False
 
         #settings for dragging
         self.mouse_is_dragging=False
         self.mouse_drag_position = QPoint() #表示一個 2D 點，初始為 (0, 0)
 
         #add Qlabel for icon
-        self.icon_label = QLabel(self) #QLabel(self) 表示這個 label 是屬於 MainWindow 視窗內的
-        self.icon_label.setGeometry(335, 25, 200, 200) #(x, y, width, height(container))
+        self.icon_label = ClickableLabel(self)
+        self.icon_label.setGeometry(10, 10, 200, 200) #(x, y, width, height(container))
 
         #add icon root to Pixamp
         icon_path = os.path.join(os.path.dirname(__file__),"components","elfie_icon_1.png")
@@ -42,11 +42,7 @@ class MainWindow(QMainWindow):
         #add .scaled() method to Pixamp
         scaled_pixmap = pixmap.scaled(100,100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.icon_label.setPixmap(scaled_pixmap)
-        
-        #icon click settings (only when block minimized)
-        self.icon_label.mousePressEvent = self.icon_mouse_press
-        self.icon_label.mouseMoveEvent = self.icon_mouse_move
-        self.icon_label.mouseReleaseEvent = self.icon_mouse_release
+   
 
     def mousePressEvent(self,e):
         if e.button()==Qt.LeftButton:
@@ -60,41 +56,34 @@ class MainWindow(QMainWindow):
         if self.mouse_is_dragging and e.buttons() & Qt.LeftButton:
             self.move(e.globalPos() - self.mouse_drag_position)
             e.accept()
-        else:
-            #minimize block
-            self.setFixedSize(self.icon_size)
-            self.color_block.hide()
-            self.icon_label.move(10,10)
-            self.minimize_block = True
-        e.accept()
 
     def mouseReleaseEvent(self,e):
         self.mouse_is_dragging = False
 
-    #icon dragging methods
-    def icon_mouse_press(self, e):
-        if e.button() == Qt.LeftButton:
-            if self.minimize_block:
-                # minimize and drag
-                self.mouse_is_dragging = True
-                self.mouse_drag_position = e.globalPos() - self.frameGeometry().topLeft()
-            else:
-                # enlarge
-                self.setFixedSize(self.icon_size)
-                self.color_block.hide()
-                self.icon_label.move(10, 10)
-                self.minimize_block = True
-            self.minimize_block = not self.minimize_block
+    def toggle_block(self):
+         if self.minimized:
+            self.setFixedSize(500, 700)
+            self.color_block.setFixedSize(500, 700)
+            self.color_block.show()
 
-    def icon_mouse_move(self,e):
-        if self.mouse_is_dragging and e.buttons()&Qt.LeftButton:
-            self.move(e.globalPos()-self.mouse_drag_position)
-            e.accept()
-    def icon_mouse_release(self,e):
-         self.mouse_is_dragging = False
+         else:
+             self.setFixedSize(200,200)
+             self.color_block.hide()
+             self.icon_label.move(10,10)
+         self.minimized = not self.minimized
+
+class ClickableLabel(QLabel):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+    def mouseDoubleClickEvent(self,event):
+        if self.parent():
+            self.parent().toggle_block()
 
 app = QApplication(sys.argv)
 
 window= MainWindow()
-window.show()
+window.show() 
+
 app.exec()
+
