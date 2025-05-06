@@ -9,9 +9,9 @@ Elfie is a lightweight desktop AI assistant that can save ur time planning and l
 |     Stage     |                  Goal                   |      Status    |
 |---------------|-----------------------------------------|----------------|
 | **Stage 1**   | Minimal UI: send prompt ➜ get reply    | ⏳ In progress |
-| **Stage 2**   | Add templates (to‑do list, work log)    |       🔜       |
+| **Stage 2**   | Write Ui, Add templates                 |       🔜       |
 | **Stage 2.5** | Decide log storage (SQLite vs. JSON)    |       🔜       |
-| **Stage 3**   | Model pcersona, command stability tests  |       🔜       |
+| **Stage 3**   | Model pcersona, command stability tests |       🔜       |
 | **Stage 4**   | History viewer (per day) | 2025‑07‑25   |       🔜       |
 | **Stage 5**   | Extras: token meter, UI themes          |       🔜       |
 
@@ -29,7 +29,7 @@ git clone https://github.com/yourname/elfie.git
 cd elfie
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env   # put your OPENAI_API_KEY inside
+cp .env.example .env   
 python -m elfie        # launches the UI
 ```
 
@@ -43,7 +43,7 @@ ai-desktop-assistant/
 ├─ .env.example      
 │
 ├─ src/
-│   └─ assistant/     ← import as 'assistant.*'
+│   └─ assistant/     
 │       ├─ __init__.py
 │       ├─ __main__.py  
 │       ├─ core/
