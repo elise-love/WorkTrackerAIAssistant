@@ -11,55 +11,26 @@
 完全不處理訊息內容，只管送出去、拿回來。
 """
 # assistant/core/openai_client.py
-import openai #import 官方sdk
+from openai import OpenAI
 from assistant.config import OPENAI_API_KEY, OPENAI_ORG_ID, TIMEOUT
 
-openai.api_key = OPENAI_API_KEY
-openai.organization = OPENAI_ORG_ID
+client = OpenAI(
+    api_key=OPENAI_API_KEY,
+    organization=OPENAI_ORG_ID,
+    timeout=TIMEOUT
+)
 
 
 def chat_completion(messages, model, **opts):
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model=model,
             messages=messages,
-            timeout=TIMEOUT,
             **opts,
-            )
-        return response.choices[0].message["content"]#只回傳最常用的 content 欄位，減少呼叫端解析負擔
-
-    except openai.error.OPENAIError as exc: #所有 SDK 相關錯誤都繼承自 OpenAIError
+        )
+        return response.choices[0].message.content
+    except Exception as exc:
         raise RuntimeError(f"OpenAI API error: {exc}") from exc
 
 
 
-"""
- return response.choices[0].message["content"]:
-
-    ChatCompletion 回傳長什麼樣？
-         OpenAI 會回傳一個 巢狀 JSON（Python 裡是 OpenAIObject，用起來跟 dict / list 類似）：
-            {
-              "id": "chatcmpl‑abc123",
-              "object": "chat.completion",
-              "created": 1680000000,
-              "model": "gpt-4o-mini",
-              "choices": [
-                {
-                  "index": 0,
-                  "message": {
-                    "role": "assistant",
-                    "content": "Here is the answer you asked for."
-                  },
-                  "finish_reason": "stop"
-                }
-              ],
-              "usage": { … }
-            }
-
-     想拿到「模型回的文字」，要順著這條路徑走：
-            response          # 最外層物件
-            └─ ["choices"]    # list
-               └─ [0]         # 第一個元素 (index 0)
-                  └─ ["message"]   # dict
-                     └─ ["content"] 
-"""

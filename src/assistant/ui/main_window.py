@@ -59,6 +59,16 @@ class MainWindow(QMainWindow):
 
         #record chat history
         self.history=[]
+
+        #chat box area
+        self.chat_display = QTextEdit(self)
+        self.chat_display.setGeometry(50, 350 ,390, 230)
+        self.chat_display.setReadOnly(True)
+        self.chat_display.setStyleSheet("""
+            background-color: rgba(255, 255, 255,0.4);
+            border-radius: 10px;
+            padding: 5px;
+        """)
    
 
     def mousePressEvent(self,e):
@@ -95,15 +105,27 @@ class MainWindow(QMainWindow):
         if not user_text:
             return
 
+        #input text
         print("User Input:",user_text)
-
-        #add user input to history
-        self.history.append(("user", user_text))
+        self.chat_display.append(f"<b>Me:</b>{user_text}") #<b>:bold
+        self.history.append(("user",user_text))
 
         #call backend function send() to send user input
-        reply = send(user_text, self.history)
+        try:
+            reply = send(user_text, self.history)
+        except Exception as e:
+            self.chat_display.append(f"<b>Elfie:</b> Error: {e}")
+            print("Error from backend:", e)
+            return
 
+        #display reply
         print("Elfie:",reply)
+        self.chat_display.append(f"<b>Elife:</b> {reply}")
+        self.history.append(("assistant", reply))
+
+        #clear input text box
+        self.text_input.clear()
+
 
 
 
