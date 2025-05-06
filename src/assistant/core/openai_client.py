@@ -4,7 +4,11 @@
 ② 包裝 openai SDK 呼叫
 ③ 把錯誤轉成乾淨的 Python 例外	
 
-不組 prompt、不存歷史
+你可以把它想成「負責打電話給 OpenAI 的小秘書」，具體職責：
+使用 openai.ChatCompletion.create(...) 呼叫 OpenAI 的 Chat API。
+管理 API 金鑰、組織 ID、timeout 等連線細節。
+回傳最關鍵的 response.choices[0].message["content"] 給外部，省去 caller 解析 response 的麻煩。
+完全不處理訊息內容，只管送出去、拿回來。
 """
 # assistant/core/openai_client.py
 import openai #import 官方sdk
@@ -13,14 +17,7 @@ from assistant.config import OPENAI_API_KEY, OPENAI_ORG_ID, TIMEOUT
 openai.api_key = OPENAI_API_KEY
 openai.organization = OPENAI_ORG_ID
 
-"""
-    參數：
-        messages — OpenAI chat 格式的訊息清單
-        model    — 預設模型，預設給 gpt-4o-mini，隨時可改
-        **opts   — 其餘可傳給 openai.ChatCompletion.create 的參數
-    回傳值：
-        str — API 回傳的 content（僅取第一個 choice）
-"""
+
 def chat_completion(messages, model, **opts):
     try:
         response = openai.ChatCompletion.create(

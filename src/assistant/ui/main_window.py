@@ -1,8 +1,11 @@
-﻿from PyQt5.QtWidgets import *
+﻿#main_window.py
+from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize,Qt,QPoint
 from PyQt5.QtGui import QPixmap #圖片資料
 import sys
 import os
+
+from assistant.core.chat_client import send
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -42,6 +45,20 @@ class MainWindow(QMainWindow):
         #add .scaled() method to Pixamp
         scaled_pixmap = pixmap.scaled(100,100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.icon_label.setPixmap(scaled_pixmap)
+
+        #add input text box
+        self.text_input = QLineEdit(self)
+        self.text_input.setGeometry(50,600,300,30)
+
+        #send button
+        self.send_button = QPushButton("Send",self)
+        self.send_button.setGeometry(360,600,80,30)
+
+        #function connect after clicking send button
+        self.send_button.clicked.connect(self.send_text)
+
+        #record chat history
+        self.history=[]
    
 
     def mousePressEvent(self,e):
@@ -71,6 +88,24 @@ class MainWindow(QMainWindow):
              self.color_block.hide()
              self.icon_label.move(10,10)
          self.minimized = not self.minimized
+
+    #input text and send
+    def send_text(self):
+        user_text = self.text_input.text().strip()
+        if not user_text:
+            return
+
+        print("User Input:",user_text)
+
+        #add user input to history
+        self.history.append(("user", user_text))
+
+        #call backend function send() to send user input
+        reply = send(user_text, self.history)
+
+        print("Elfie:",reply)
+
+
 
 class ClickableLabel(QLabel):
     def __init__(self, parent=None):
