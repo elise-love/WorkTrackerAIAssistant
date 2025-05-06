@@ -24,31 +24,33 @@ class MainWindow(QMainWindow):
         """)
 
         #settings for dragging
-        self.is_dragging=False
-        self._drag_position = QPoint() #表示一個 2D 點，初始為 (0, 0)
+        self.mouse_is_dragging=False
+        self.mouse_drag_position = QPoint() #表示一個 2D 點，初始為 (0, 0)
 
         #add Qlabel for icon
-        self.label = QLabel(self) #QLabel(self) 表示這個 label 是屬於 MainWindow 視窗內的
-        self.label.setGeometry(335, 25, 200, 200) #(x, y, width, height(container))
+        self.icon_label = QLabel(self) #QLabel(self) 表示這個 label 是屬於 MainWindow 視窗內的
+        self.icon_label.setGeometry(335, 25, 200, 200) #(x, y, width, height(container))
 
-        #add icon
+        #add icon root to Pixamp
         icon_path = os.path.join(os.path.dirname(__file__),"components","elfie_icon_1.png")
         pixmap=QPixmap(icon_path)
+        
+        #add .scaled() method to Pixamp
         scaled_pixmap = pixmap.scaled(100,100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        self.label.setPixmap(scaled_pixmap)
+        self.icon_label.setPixmap(scaled_pixmap)
         
 
     def mousePressEvent(self,e):
         if e.button()==Qt.LeftButton:
-            self.is_dragging = True
-            self._drag_position = e.globalPos() - self.frameGeometry().topLeft()
+            self.mouse_is_dragging = True
+            self.mouse_drag_position = e.globalPos() - self.frameGeometry().topLeft()
             #e.globalPos()：回傳滑鼠在 螢幕上 的座標位置
 
             e.accept()
 
     def mouseMoveEvent(self, e):
-        if self.is_dragging and e.buttons() & Qt.LeftButton:
-            self.move(e.globalPos() - self._drag_position)
+        if self.mouse_is_dragging and e.buttons() & Qt.LeftButton:
+            self.move(e.globalPos() - self.mouse_drag_position)
             e.accept()
         """
         event.buttons() & Qt.LeftButton:
@@ -57,7 +59,7 @@ class MainWindow(QMainWindow):
         """
 
     def mouseReleaseEvent(self,e):
-        self.is_dragging = False
+        self.mouse_is_dragging = False
 
 app = QApplication(sys.argv)
 
