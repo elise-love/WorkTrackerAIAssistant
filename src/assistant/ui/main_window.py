@@ -8,17 +8,21 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        #window settings
-        self.setFixedSize(500,700)
+        #initial window settings
+        self.full_size = QSize(500,700)
+        self.icon_size = QSize(200,200)
+        self.minimize_block = False
+
+        self.setFixedSize(self.full_size)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setCentralWidget(QWidget()) #base widget
 
         #color block settings
-        color_block = QWidget(self)
-        color_block.setFixedSize(500,700)
+        self.color_block = QWidget(self)
+        self.color_block.setFixedSize(self.full_size)
         #color_block.setGeometry(50 ,100, 300 ,400)
-        color_block.setStyleSheet("""
+        self.color_block.setStyleSheet("""
             background-color: rgba(202, 192, 237, 206);
             border-radius: 20px;
         """)
@@ -39,6 +43,10 @@ class MainWindow(QMainWindow):
         scaled_pixmap = pixmap.scaled(100,100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.icon_label.setPixmap(scaled_pixmap)
         
+        #icon click settings (only when block minimized)
+        self.icon_label.mousePressEvent = self.icon_mouse_press
+        self.icon_label.mouseMoveEvent = self.icon_mouse_move
+        self.icon_label.mouseReleaseEvent = self.icon_mouse_release
 
     def mousePressEvent(self,e):
         if e.button()==Qt.LeftButton:
@@ -52,19 +60,41 @@ class MainWindow(QMainWindow):
         if self.mouse_is_dragging and e.buttons() & Qt.LeftButton:
             self.move(e.globalPos() - self.mouse_drag_position)
             e.accept()
-        """
-        event.buttons() & Qt.LeftButton:
-            使用位元運算 & 來檢查 左鍵是否包含在目前被按的按鍵中。
-            如果有按下左鍵，就會是 True，否則是 False。
-        """
+        else:
+            #minimize block
+            self.setFixedSize(self.icon_size)
+            self.color_block.hide()
+            self.icon_label.move(10,10)
+            self.minimize_block = True
+        e.accept()
 
     def mouseReleaseEvent(self,e):
         self.mouse_is_dragging = False
 
+    #icon dragging methods
+    def icon_mouse_press(self, e):
+        if e.button() == Qt.LeftButton:
+            if self.minimize_block:
+                # minimize and drag
+                self.mouse_is_dragging = True
+                self.mouse_drag_position = e.globalPos() - self.frameGeometry().topLeft()
+            else:
+                # enlarge
+                self.setFixedSize(self.icon_size)
+                self.color_block.hide()
+                self.icon_label.move(10, 10)
+                self.minimize_block = True
+            self.minimize_block = not self.minimize_block
+
+    def icon_mouse_move(self,e):
+        if self.mouse_is_dragging and e.buttons()&Qt.LeftButton:
+            self.move(e.globalPos()-self.mouse_drag_position)
+            e.accept()
+    def icon_mouse_release(self,e):
+         self.mouse_is_dragging = False
+
 app = QApplication(sys.argv)
 
 window= MainWindow()
-window.show() 
-
+window.show()
 app.exec()
-
