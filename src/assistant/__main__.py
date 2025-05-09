@@ -16,3 +16,4 @@ if __name__ =="__main__":
 $env:PYTHONPATH = "src"
 python -m assistant
 """
+

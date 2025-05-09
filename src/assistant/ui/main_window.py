@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
         self.mouse_drag_position = QPoint() #表示一個 2D 點，初始為 (0, 0)
 
         #add Qlabel for icon
-        self.icon_label = ClickableLabel(self)
+        self.icon_label = ClickableLabel(self, callback=self.toggle_block)
         self.icon_label.setGeometry(10, 10, 200, 200) #(x, y, width, height(container))
 
         #add icon root to Pixamp
@@ -46,30 +46,14 @@ class MainWindow(QMainWindow):
         scaled_pixmap = pixmap.scaled(100,100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.icon_label.setPixmap(scaled_pixmap)
 
-        #add input text box
-        self.text_input = QLineEdit(self)
-        self.text_input.setGeometry(50,600,300,30)
+        #type-icon setup
+        self.type_icon = ClickableLabel(self, callback=self.open_type_ui)
+        self.type_icon.setGeometry(215, 600,  100, 100)
 
-        #send button
-        self.send_button = QPushButton("Send",self)
-        self.send_button.setGeometry(360,600,80,30)
-
-        #function connect after clicking send button
-        self.send_button.clicked.connect(self.send_text)
-
-        #record chat history
-        self.history=[]
-
-        #chat box area
-        self.chat_display = QTextEdit(self)
-        self.chat_display.setGeometry(50, 350 ,390, 230)
-        self.chat_display.setReadOnly(True)
-        self.chat_display.setStyleSheet("""
-            background-color: rgba(255, 255, 255,0.4);
-            border-radius: 10px;
-            padding: 5px;
-        """)
-   
+        type_icon_path = os.path.join(os.path.dirname(__file__),"components","type-icon.png")
+        type_pixmap = QPixmap(type_icon_path)
+        scaled_type_pixmap = type_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.type_icon.setPixmap(scaled_type_pixmap)
 
     def mousePressEvent(self,e):
         if e.button()==Qt.LeftButton:
@@ -99,43 +83,31 @@ class MainWindow(QMainWindow):
              self.icon_label.move(10,10)
          self.minimized = not self.minimized
 
-    #input text and send
-    def send_text(self):
-        user_text = self.text_input.text().strip()
-        if not user_text:
-            return
-
-        #input text
-        print("User Input:",user_text)
-        self.chat_display.append(f"<b>Me:</b>{user_text}") #<b>:bold
-        self.history.append(("user",user_text))
-
-        #call backend function send() to send user input
-        try:
-            reply = send(user_text, self.history)
-        except Exception as e:
-            self.chat_display.append(f"<b>Elfie:</b> Error: {e}")
-            print("Error from backend:", e)
-            return
-
-        #display reply
-        print("Elfie:",reply)
-        self.chat_display.append(f"<b>Elife:</b> {reply}")
-        self.history.append(("assistant", reply))
-
-        #clear input text box
-        self.text_input.clear()
-
-
+    def open_type_ui(self):
+        self.type_window = TypeWindow()
+        self.type_window.show()
 
 
 class ClickableLabel(QLabel):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, callback=None):
         super().__init__(parent)
+        self.callback = callback
 
     def mouseDoubleClickEvent(self,event):
-        if self.parent():
-            self.parent().toggle_block()
+        if self.callback:
+            self.callback()
+
+class TypeWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Type UI")
+        self.setGeometry(600, 300, 300, 200)
+
+        label = QLabel(" ",self)
+        label.setAlignment(Qt.AlignCenter)
+        layout = QVBoxLayout()
+        layout.addWidget(label)
+        self.setLayout(layout)
 
 app = QApplication(sys.argv)
 
