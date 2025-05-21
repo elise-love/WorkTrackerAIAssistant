@@ -1,5 +1,5 @@
 ﻿from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPixmap
 import os
 
@@ -30,6 +30,12 @@ class TypeWindow(QWidget):
         layout.addWidget(label)
         layout.setContentsMargins(0, 0, 0, 0)
 
+        #settings for dragging
+        self.mouse_is_dragging = False
+        self.mouse_drag_position = QPoint()
+        self.setMouseTracking(True)
+
+
     def resizeEvent(self, event):
         self.update_background()
         super().resizeEvent(event)
@@ -39,5 +45,19 @@ class TypeWindow(QWidget):
             scaled_pixmap = self.pixmap.scaled(self.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
             self.background_label.setPixmap(scaled_pixmap)
             self.background_label.resize(self.size())
-        else:
-            print(f"❌ 圖片載入失敗：{self.img_path}")
+
+    #dragging function
+    def mousePressEvent(self,e):
+        if e.button() == Qt.LeftButton:
+            self.mouse_is_dragging = True
+            self.mouse_drag_position = e.globalPos() - self.frameGeometry().topLeft()
+
+            e.accept()
+    
+    def mouseMoveEvent(self ,e):
+        if self.mouse_is_dragging and (e.buttons() & Qt.LeftButton):
+            self.move(e.globalPos() - self.mouse_drag_position)
+            e.accept()
+
+    def mouseReleaseEvent(self, e):
+        self.mouse_is_dragging = False

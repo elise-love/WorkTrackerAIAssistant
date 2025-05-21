@@ -1,7 +1,7 @@
 ﻿#main_window.py
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QSize,Qt,QPoint
-from PyQt5.QtGui import QPixmap #圖片資料
+from PyQt5.QtCore import Qt,QPoint
+from PyQt5.QtGui import QPixmap 
 from assistant.ui.type_window import TypeWindow
 import sys
 import os
@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
             e.accept()
 
     def mouseMoveEvent(self, e):
-        if self.mouse_is_dragging and e.buttons() & Qt.LeftButton:
+        if self.mouse_is_dragging and (e.buttons() & Qt.LeftButton):
             self.move(e.globalPos() - self.mouse_drag_position)
             e.accept()
 
