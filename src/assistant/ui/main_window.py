@@ -2,6 +2,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize,Qt,QPoint
 from PyQt5.QtGui import QPixmap #圖片資料
+from assistant.ui.type_window import TypeWindow
 import sys
 import os
 
@@ -35,7 +36,7 @@ class MainWindow(QMainWindow):
         self.mouse_drag_position = QPoint() #表示一個 2D 點，初始為 (0, 0)
 
         #add Qlabel for icon
-        self.icon_label = ClickableLabel(self, callback=self.toggle_block)
+        self.icon_label = ClickableLabel(self, double_click_callback=self.toggle_block)
         self.icon_label.setGeometry(10, 10, 200, 200) #(x, y, width, height(container))
 
         #add icon root to Pixamp
@@ -47,7 +48,7 @@ class MainWindow(QMainWindow):
         self.icon_label.setPixmap(scaled_pixmap)
 
         #type-icon setup
-        self.type_icon = ClickableLabel(self, callback=self.open_type_ui)
+        self.type_icon = ClickableLabel(self, single_click_callback=self.open_type_ui)
         self.type_icon.setGeometry(215, 600,  100, 100)
 
         type_icon_path = os.path.join(os.path.dirname(__file__),"components","type-icon.png")
@@ -89,25 +90,20 @@ class MainWindow(QMainWindow):
 
 
 class ClickableLabel(QLabel):
-    def __init__(self, parent=None, callback=None):
+    def __init__(self, parent=None, single_click_callback=None, double_click_callback=None):
         super().__init__(parent)
-        self.callback = callback
+        self.single_click_callback = single_click_callback
+        self.double_click_callback = double_click_callback
 
-    def mouseDoubleClickEvent(self,event):
-        if self.callback:
-            self.callback()
+    def mousePressEvent(self, e):
+        if e.button() == Qt.LeftButton and self.single_click_callback:
+            self.single_click_callback()
 
-class TypeWindow(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Type UI")
-        self.setGeometry(600, 300, 300, 200)
+    def mouseDoubleClickEvent(self, e):
+        if e.button() == Qt.LeftButton and self.double_click_callback:
+            self.double_click_callback()
 
-        label = QLabel(" ",self)
-        label.setAlignment(Qt.AlignCenter)
-        layout = QVBoxLayout()
-        layout.addWidget(label)
-        self.setLayout(layout)
+
 
 app = QApplication(sys.argv)
 
@@ -115,4 +111,3 @@ window= MainWindow()
 window.show() 
 
 app.exec()
-
