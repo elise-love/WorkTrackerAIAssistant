@@ -2,11 +2,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt,QPoint
 from PyQt5.QtGui import QPixmap 
-from assistant.ui.type_window import TypeWindow
 import sys
 import os
 
-from assistant.core.chat_client import send
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -48,7 +46,7 @@ class MainWindow(QMainWindow):
         self.icon_label.setPixmap(scaled_pixmap)
 
         #type-icon setup
-        self.type_icon = ClickableLabel(self, single_click_callback=self.open_type_ui)
+        self.type_icon = ClickableLabel(self)
         self.type_icon.setGeometry(215, 600,  100, 100)
 
         type_icon_path = os.path.join(os.path.dirname(__file__),"components","type-icon.png")
@@ -83,10 +81,6 @@ class MainWindow(QMainWindow):
              self.color_block.hide()
              self.icon_label.move(10,10)
          self.minimized = not self.minimized
-
-    def open_type_ui(self):
-        self.type_window = TypeWindow()
-        self.type_window.show()
 
 
 class ClickableLabel(QLabel):

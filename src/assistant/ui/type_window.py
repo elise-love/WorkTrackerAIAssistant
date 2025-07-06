@@ -1,19 +1,23 @@
-﻿from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+﻿#type_window.py
+from PyQt5.QtWidgets import QWidget, QLabel,QVBoxLayout, QApplication
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPixmap
+import sys
 import os
 
 class TypeWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setFixedSize(600,400)
+        MARGIN = 8
+
+        self.setFixedSize(600,450)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowFlags(Qt.FramelessWindowHint)
 
         #load background img
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        img_path = os.path.join(current_dir, "components", "type_window_1.jpg")
+        img_path = os.path.join(current_dir, "components", "type_window.png")
         self.pixmap = QPixmap(img_path)
 
         #background Qlabel
@@ -59,5 +63,15 @@ class TypeWindow(QWidget):
             self.move(e.globalPos() - self.mouse_drag_position)
             e.accept()
 
+        pos = e.pos()
+        x,y = pos
+
     def mouseReleaseEvent(self, e):
         self.mouse_is_dragging = False
+
+if  __name__ == '__main__':
+    
+    app = QApplication(sys.argv)
+    window = TypeWindow()
+    window.show()
+    sys.exit(app.exec_())
