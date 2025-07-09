@@ -1,5 +1,5 @@
 ﻿#type_window.py
-from PyQt5.QtWidgets import QWidget, QLabel,QVBoxLayout, QApplication
+from PyQt5.QtWidgets import QWidget, QLabel,QVBoxLayout, QApplication, QTextEdit
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPixmap
 import sys
@@ -8,8 +8,6 @@ import os
 class TypeWindow(QWidget):
     def __init__(self):
         super().__init__()
-
-        MARGIN = 8
 
         self.setFixedSize(600,450)
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -23,6 +21,8 @@ class TypeWindow(QWidget):
         #background Qlabel
         self.background_label = QLabel(self)
         self.background_label.setScaledContents(True) #automaically scale to fit
+        self.background_label.setMouseTracking(True)
+        self.background_label.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.update_background()
 
       
@@ -39,35 +39,63 @@ class TypeWindow(QWidget):
         self.mouse_drag_position = QPoint()
         self.setMouseTracking(True)
 
+        #assistant label
+        assistant_lable = QLabel("小精靈: ", self)
+        assistant_lable.setStyleSheet("""
+            font-size: 15px;
+            font-family: '萌神手書體';
+            color: black;
+        """)
+        self.assistant_label = assistant_lable
+        assistant_lable.setGeometry(30,73,50,20)
 
-    def resizeEvent(self, event):
-        self.update_background()
-        super().resizeEvent(event)
+        #type area
+        self.type_area = QTextEdit(self)
+        self.type_area.setPlaceholderText("")
+        self.type_area.setFixedSize(550,73)
+        self.type_area.setStyleSheet("""
+            QTextEdit{
+                background-color: transparent;
+                border: none;
+                font-family: 'Comic Sans MS';
+                font-size: 14px;
+            }
+        """)
+        self.type_area.setGeometry(23,353,550,73)
+
+        '''
+        #user label
+        user_lable = QLabel("芍芍: ", self)
+        user_lable.setStyleSheet("""
+            font-size: 15px;
+            font-family: '萌神手書體';
+            color: black;
+        """)
+        self.user_label = user_lable
+        user_lable.setGeometry(30,355,35,20)
+        '''
 
     def update_background(self):
         if not self.pixmap.isNull():
             scaled_pixmap = self.pixmap.scaled(self.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
             self.background_label.setPixmap(scaled_pixmap)
             self.background_label.resize(self.size())
+            self.background_label.lower()
 
-    #dragging function
     def mousePressEvent(self,e):
         if e.button() == Qt.LeftButton:
             self.mouse_is_dragging = True
             self.mouse_drag_position = e.globalPos() - self.frameGeometry().topLeft()
-
             e.accept()
     
     def mouseMoveEvent(self ,e):
-        if self.mouse_is_dragging and (e.buttons() & Qt.LeftButton):
+        if  self.mouse_is_dragging and (e.buttons() & Qt.LeftButton):
             self.move(e.globalPos() - self.mouse_drag_position)
             e.accept()
 
-        pos = e.pos()
-        x,y = pos
-
     def mouseReleaseEvent(self, e):
         self.mouse_is_dragging = False
+
 
 if  __name__ == '__main__':
     
