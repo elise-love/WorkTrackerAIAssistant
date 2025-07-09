@@ -1,5 +1,5 @@
 ﻿#type_window.py
-from PyQt5.QtWidgets import QWidget, QLabel,QVBoxLayout, QApplication, QTextEdit
+from PyQt5.QtWidgets import QWidget, QLabel,QVBoxLayout, QApplication, QTextEdit, QPlainTextEdit
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPixmap
 import sys
@@ -39,15 +39,32 @@ class TypeWindow(QWidget):
         self.mouse_drag_position = QPoint()
         self.setMouseTracking(True)
 
+        #reply area
+        self.reply_area = QPlainTextEdit(self)
+        self.reply_area.setPlainText("A stalking wolf wants to eat the girl and the food in the basket. After he inquires as to where she is going, he suggests that she pick some flowers as a present for her grandmother. While she goes in search of flowers, he goes to the grandmother's house and gains entry by pretending to be Riding Hood. He swallows the grandmother whole, climbs into her bed, and waits for the girl, disguised as the grandmother.")
+        self.reply_area.setReadOnly(True)
+        self.reply_area.setFixedSize(540,250)
+        self.reply_area.setStyleSheet("""
+            background-color: transparent;
+            border: none;
+            font-family: '萌神手書體';
+            font-size:16px;
+            font-color: (0,0,0,150);
+            line-height: 150%;
+        """)
+        self.reply_area.setGeometry(26,78,550,73)
+
+        '''
         #assistant label
         assistant_lable = QLabel("小精靈: ", self)
         assistant_lable.setStyleSheet("""
-            font-size: 15px;
+            font-size: 17px;
             font-family: '萌神手書體';
             color: black;
         """)
         self.assistant_label = assistant_lable
         assistant_lable.setGeometry(30,73,50,20)
+        '''
 
         #type area
         self.type_area = QTextEdit(self)
