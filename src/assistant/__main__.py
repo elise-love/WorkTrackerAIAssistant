@@ -1,6 +1,6 @@
-﻿# assistant/__main__.py
+﻿# ui/__main__.py
 from PyQt5.QtWidgets import QApplication
-from assistant.ui.main_window import MainWindow
+from ui.main_window import MainWindow
 import sys
 
 def main():
@@ -11,9 +11,4 @@ def main():
 
 if __name__ =="__main__":
     main()
-
-"""
-$env:PYTHONPATH = "src"
-python -m assistant
-"""
 

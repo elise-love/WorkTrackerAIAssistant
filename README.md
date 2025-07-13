@@ -9,11 +9,12 @@ Elfie is a lightweight desktop AI assistant that can save ur time planning and l
 |     Stage     |                  Goal                   |      Status    |
 |---------------|-----------------------------------------|----------------|
 | **Stage 1**   | Minimal UI: send prompt ➜ get reply    |       ✅       |
-| **Stage 2**   | Write Ui, Add templates                 |⏳ In progress  |
-| **Stage 2.5** | Decide log storage (SQLite vs. JSON)    |       🔜       |
-| **Stage 3**   | Model pcersona, command stability tests |       🔜       |
-| **Stage 4**   | History viewer (per day)                |       🔜       |
-| **Stage 5**   | Extras: token meter, UI themes          |       🔜       |
+| **Stage 2**   | Write Ui, Add templates                 |       ✅       |
+| **Stage 3**   | Integrate ui and core                   |⏳ In progress  |
+| **Stage 4**   | Decide log storage (SQLite vs. JSON)    |       🔜       |
+| **Stage 5**   | Model pcersona, command stability tests |       🔜       |
+| **Stage 6**   | History viewer (per day)                |       🔜       |
+| **Stage 7**   | Extras: token meter, UI themes          |       🔜       |
 
 
 ## ⚙️ Tech Stack & Constraints

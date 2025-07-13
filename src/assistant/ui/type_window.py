@@ -41,7 +41,7 @@ class TypeWindow(QWidget):
 
         #reply area
         self.reply_area = QPlainTextEdit(self)
-        self.reply_area.setPlainText("A stalking wolf wants to eat the girl and the food in the basket. After he inquires as to where she is going, he suggests that she pick some flowers as a present for her grandmother. While she goes in search of flowers, he goes to the grandmother's house and gains entry by pretending to be Riding Hood. He swallows the grandmother whole, climbs into her bed, and waits for the girl, disguised as the grandmother.")
+        self.reply_area.setPlainText("精靈: ")
         self.reply_area.setReadOnly(True)
         self.reply_area.setFixedSize(540,250)
         self.reply_area.setStyleSheet("""

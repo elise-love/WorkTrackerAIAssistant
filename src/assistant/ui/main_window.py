@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt,QPoint
 from PyQt5.QtGui import QPixmap 
 import sys
 import os
+from ui.type_window import TypeWindow
 
 
 class MainWindow(QMainWindow):
@@ -11,7 +12,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         #window settings
-        self.setFixedSize(500,700)
+        self.setFixedSize(1500,1400)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setCentralWidget(QWidget()) #base widget
@@ -46,7 +47,9 @@ class MainWindow(QMainWindow):
         self.icon_label.setPixmap(scaled_pixmap)
 
         #type-icon setup
-        self.type_icon = ClickableLabel(self)
+        self.type_window = TypeWindow()
+        self.type_window_display = False
+        self.type_icon = ClickableLabel(self, double_click_callback = self.toggle_typeWindow)
         self.type_icon.setGeometry(215, 600,  100, 100)
 
         type_icon_path = os.path.join(os.path.dirname(__file__),"components","type-icon.png")
@@ -54,6 +57,7 @@ class MainWindow(QMainWindow):
         scaled_type_pixmap = type_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.type_icon.setPixmap(scaled_type_pixmap)
 
+        self.move(1420,380)
     def mousePressEvent(self,e):
         if e.button()==Qt.LeftButton:
             self.mouse_is_dragging = True
@@ -82,6 +86,14 @@ class MainWindow(QMainWindow):
              self.icon_label.move(10,10)
          self.minimized = not self.minimized
 
+
+    def toggle_typeWindow(self):
+        if not self.type_window_display:
+            self.type_window.show()
+
+        else:
+            self.type_window.hide()
+        self.type_window_display = not self.type_window_display
 
 class ClickableLabel(QLabel):
     def __init__(self, parent=None, single_click_callback=None, double_click_callback=None):
