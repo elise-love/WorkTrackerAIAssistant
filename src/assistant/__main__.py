@@ -1,7 +1,9 @@
-﻿# ui/__main__.py
+﻿# assistant/__main__.py
 from PyQt5.QtWidgets import QApplication
 from ui.main_window import MainWindow
 import sys
+
+
 
 def main():
     app = QApplication(sys.argv)

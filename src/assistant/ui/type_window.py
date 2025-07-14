@@ -1,9 +1,10 @@
 ﻿#type_window.py
-from PyQt5.QtWidgets import QWidget, QLabel,QVBoxLayout, QApplication, QTextEdit, QPlainTextEdit
+from PyQt5.QtWidgets import QWidget, QLabel,QVBoxLayout, QApplication, QTextEdit, QPlainTextEdit, QPushButton
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPixmap
 import sys
 import os
+from core.chat_client import send 
 
 class TypeWindow(QWidget):
     def __init__(self):
@@ -66,11 +67,11 @@ class TypeWindow(QWidget):
         assistant_lable.setGeometry(30,73,50,20)
         '''
 
-        #type area
-        self.type_area = QTextEdit(self)
-        self.type_area.setPlaceholderText("")
-        self.type_area.setFixedSize(550,73)
-        self.type_area.setStyleSheet("""
+        #input box
+        self.input_box = QTextEdit(self)
+        self.input_box.setPlaceholderText("")
+        self.input_box.setFixedSize(550,73)
+        self.input_box.setStyleSheet("""
             QTextEdit{
                 background-color: transparent;
                 border: none;
@@ -78,19 +79,27 @@ class TypeWindow(QWidget):
                 font-size: 14px;
             }
         """)
-        self.type_area.setGeometry(23,353,550,73)
+        self.input_box.setGeometry(23,353,550,73)
 
+        #send button
+        self.send_button = QPushButton("Send", self)
+        self.send_button.setFixedSize(60,30)
         '''
-        #user label
-        user_lable = QLabel("芍芍: ", self)
-        user_lable.setStyleSheet("""
-            font-size: 15px;
-            font-family: '萌神手書體';
-            color: black;
+        self.send_button.setStyleSheet("""
+            border-radius: 5px;
+            border-color: purple;
+            color: purple;
+            background-color: rgba(190, 160, 206, 206)
+            font-family: 'Comic Sans MS';
+            font-weight: bold;
         """)
-        self.user_label = user_lable
-        user_lable.setGeometry(30,355,35,20)
         '''
+        self.send_button.move(510,390)
+        self.send_button.clicked.connect(self.handle_send)
+
+        #save chat history
+        self.history = []
+
 
     def update_background(self):
         if not self.pixmap.isNull():
@@ -112,6 +121,20 @@ class TypeWindow(QWidget):
 
     def mouseReleaseEvent(self, e):
         self.mouse_is_dragging = False
+
+    def handle_send(self):
+        user_text = self.input_box.toPlainText().strip()
+        if not user_text:
+            return
+        self.history.append(("user", user_text))
+
+        try:
+            response  = send(user_text, self.history)
+            self.reply_area.appendPlainText(f"精靈: {response}")
+        except Exception as e:
+            self.reply_area.appendPlainText(f"[Error] {e}")
+
+        self.input_box.clear()
 
 
 if  __name__ == '__main__':

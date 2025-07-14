@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
 
         self.move(1420,380)
 
+
     def mousePressEvent(self,e):
         if e.button()==Qt.LeftButton:
             self.mouse_is_dragging = True
@@ -109,6 +110,7 @@ class MainWindow(QMainWindow):
             self.type_window.hide()
         self.type_window_display = not self.type_window_display
 
+
 class ClickableLabel(QLabel):
     def __init__(self, parent=None, single_click_callback=None, double_click_callback=None):
         super().__init__(parent)
@@ -124,10 +126,8 @@ class ClickableLabel(QLabel):
             self.double_click_callback()
 
 
-
-app = QApplication(sys.argv)
-
-window= MainWindow()
-window.show() 
-
-app.exec()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window= MainWindow()
+    window.show() 
+    app.exec()
