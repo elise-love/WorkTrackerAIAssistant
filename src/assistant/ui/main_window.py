@@ -24,6 +24,7 @@ class MainWindow(QMainWindow):
         color_block.setStyleSheet("""
             background-color: rgba(202, 192, 237, 206);
             border-radius: 20px;
+            padding: 0;
         """)
 
         self.color_block = color_block
@@ -36,7 +37,7 @@ class MainWindow(QMainWindow):
 
         #add Qlabel for icon
         self.icon_label = ClickableLabel(self, double_click_callback=self.toggle_block)
-        self.icon_label.setGeometry(10, 10, 200, 200) #(x, y, width, height(container))
+        self.icon_label.setGeometry(5, 0, 200, 200) #(x, y, width, height(container))
 
         #add icon root to Pixamp
         icon_path = os.path.join(os.path.dirname(__file__),"components","elfie_icon_1.png")
@@ -57,7 +58,20 @@ class MainWindow(QMainWindow):
         scaled_type_pixmap = type_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.type_icon.setPixmap(scaled_type_pixmap)
 
+        #plan_display area
+        self.plan_display_area = QPlainTextEdit(self)
+        self.plan_display_area.setPlainText("")
+        self.plan_display_area.setReadOnly(True)
+        self.plan_display_area.setFixedSize(480,450)
+        self.plan_display_area.setStyleSheet("""
+            border: none;
+            border-radius: 10px;
+            background-color: transparent;
+        """)
+        self.plan_display_area.move(11,160)
+
         self.move(1420,380)
+
     def mousePressEvent(self,e):
         if e.button()==Qt.LeftButton:
             self.mouse_is_dragging = True
