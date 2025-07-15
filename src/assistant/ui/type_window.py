@@ -42,7 +42,7 @@ class TypeWindow(QWidget):
 
         #reply area
         self.reply_area = QPlainTextEdit(self)
-        self.reply_area.setPlainText("精靈: ")
+        self.reply_area.setPlainText("")
         self.reply_area.setReadOnly(True)
         self.reply_area.setFixedSize(540,250)
         self.reply_area.setStyleSheet("""
@@ -54,18 +54,6 @@ class TypeWindow(QWidget):
             line-height: 150%;
         """)
         self.reply_area.setGeometry(26,78,550,73)
-
-        '''
-        #assistant label
-        assistant_lable = QLabel("小精靈: ", self)
-        assistant_lable.setStyleSheet("""
-            font-size: 17px;
-            font-family: '萌神手書體';
-            color: black;
-        """)
-        self.assistant_label = assistant_lable
-        assistant_lable.setGeometry(30,73,50,20)
-        '''
 
         #input box
         self.input_box = QTextEdit(self)
@@ -129,7 +117,7 @@ class TypeWindow(QWidget):
         self.history.append(("user", user_text))
 
         try:
-            response  = send(user_text, self.history)
+            response  = send(user_text, self.history, profile_id = "Elfie")
             self.reply_area.appendPlainText(f"精靈: {response}")
         except Exception as e:
             self.reply_area.appendPlainText(f"[Error] {e}")

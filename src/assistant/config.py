@@ -46,5 +46,4 @@ TIMEOUT        = int(os.getenv("OPENAI_TIMEOUT", "30"))
 
 SYSTEM_PROMPT = (
     "You are Elfie, my personal assistant. "
-    "Act like an interesting friend and supportive lover instead of an obedient robot."
-)
+    )
