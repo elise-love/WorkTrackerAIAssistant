@@ -48,7 +48,7 @@ class TypeWindow(QWidget):
         self.reply_area.setStyleSheet("""
             background-color: transparent;
             border: none;
-            font-family: '萌神手書體';
+            font-family: '微軟正黑體 Light';
             font-size:16px;
             font-color: (0,0,0,150);
             line-height: 150%;
@@ -64,7 +64,7 @@ class TypeWindow(QWidget):
                 background-color: transparent;
                 border: none;
                 font-family: 'Comic Sans MS';
-                font-size: 14px;
+                font-size: 15px;
             }
         """)
         self.input_box.setGeometry(23,353,550,73)
@@ -114,11 +114,25 @@ class TypeWindow(QWidget):
         user_text = self.input_box.toPlainText().strip()
         if not user_text:
             return
+
+        user_html = f"""
+            <div style = "margin-bottom:10px; font-family:'微軟正黑體 Light', 'Comic Sans MS'; font-size:15px; line-height: 1.3;">
+                <b>芍芍:<b> <span>{user_text}<\span>
+            <div>
+        """
+
+        self.reply_area.appendHtml(user_html)
         self.history.append(("user", user_text))
 
         try:
             response  = send(user_text, self.history, profile_id = "Elfie")
-            self.reply_area.appendPlainText(f"精靈: {response}")
+            elfie_html = f"""
+            <div style= "margin-bottom: 15px; font-family:'微軟正黑體 Light', 'Comic Sans MS'; font-size:15px; line-height: 1.3;">
+                <b>精靈:</b> <span>{response}<\span>
+            <div>
+            """
+            self.reply_area.appendHtml(elfie_html)
+
         except Exception as e:
             self.reply_area.appendPlainText(f"[Error] {e}")
 
