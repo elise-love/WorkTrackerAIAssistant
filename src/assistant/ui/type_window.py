@@ -5,7 +5,6 @@ from PyQt5.QtGui import QPixmap
 import sys
 import os
 from core.chat_client import send
-from mem.log_writer import log_message
 
 class TypeWindow(QWidget):
     def __init__(self):
@@ -122,9 +121,8 @@ class TypeWindow(QWidget):
             <div>
         """
         self.reply_area.appendHtml(user_html)
-        
-        self.history.append(("user", user_text))
-        log_message("Elfie","user", user_text)
+     
+
 
         try:
             response, category  = send(user_text, self.history, profile_id = "Elfie")
@@ -134,7 +132,7 @@ class TypeWindow(QWidget):
             <div>
             """
             self.reply_area.appendHtml(elfie_html)
-            log_message("Elfie","assistant",response,category=category)
+           
         
         except Exception as e:
             self.reply_area.appendPlainText(f"[Error] {e}")
