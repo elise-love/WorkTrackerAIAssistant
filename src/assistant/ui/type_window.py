@@ -4,7 +4,8 @@ from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPixmap
 import sys
 import os
-from core.chat_client import send 
+from core.chat_client import send
+from mem.log_writer import log_message
 
 class TypeWindow(QWidget):
     def __init__(self):
@@ -120,19 +121,21 @@ class TypeWindow(QWidget):
                 <b>芍芍:<b> <span>{user_text}<\span>
             <div>
         """
-
         self.reply_area.appendHtml(user_html)
+        
         self.history.append(("user", user_text))
+        log_message("Elfie","user", user_text)
 
         try:
-            response  = send(user_text, self.history, profile_id = "Elfie")
+            response, category  = send(user_text, self.history, profile_id = "Elfie")
             elfie_html = f"""
             <div style= "margin-bottom: 15px; font-family:'微軟正黑體 Light', 'Comic Sans MS'; font-size:15px; line-height: 1.3;">
                 <b>精靈:</b> <span>{response}<\span>
             <div>
             """
             self.reply_area.appendHtml(elfie_html)
-
+            log_message("Elfie","assistant",response,category=category)
+        
         except Exception as e:
             self.reply_area.appendPlainText(f"[Error] {e}")
 

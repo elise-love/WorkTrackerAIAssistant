@@ -39,7 +39,7 @@ OPENAI_API_KEY = _need("OPENAI_API_KEY")
 # 用 os.getenv，沒設定給空字串
 OPENAI_ORG_ID  = os.getenv("OPENAI_ORG_ID", "")
 
-MODEL_DEFAULT  = os.getenv("MODEL_DEFAULT", "gpt-4o")
+MODEL_DEFAULT  = os.getenv("MODEL_DEFAULT", "gpt-4.1")
 
 # API 逾時秒數；可自行在 .env 覆寫
 TIMEOUT        = int(os.getenv("OPENAI_TIMEOUT", "30"))

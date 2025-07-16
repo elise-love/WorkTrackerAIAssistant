@@ -17,6 +17,10 @@ def chat_completion(messages, model, **opts):
             **opts,
         )
 
+        print("\n[System Prompt Preview]")
+        for msg in messages:
+            print(f"{msg['role'].upper()}: {msg['content'][:80]}...")  
+
         return response.choices[0].message.content
     except Exception as exc:
         raise RuntimeError(f"OpenAI API error: {exc}") from exc
