@@ -4,8 +4,13 @@ from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPixmap
 import sys
 import os
-from core.chat_client import send
-
+from core.assistant_client import send_message_to_thread
+import logging 
+logging.basicConfig(
+    level = logging.INFO,
+    format = '[%(astime)s [%(levelname)s] %(message)s',
+    handler = [logging.StreamHandler()]
+)
 class TypeWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -113,8 +118,10 @@ class TypeWindow(QWidget):
     def handle_send(self):
         user_text = self.input_box.toPlainText().strip()
         if not user_text:
+            logging.error("Failed to strip user text!")
             return
 
+        #append user text to repy area
         user_html = f"""
             <div style = "margin-bottom:10px; font-family:'微軟正黑體 Light', 'Comic Sans MS'; font-size:15px; line-height: 1.3;">
                 <b>芍芍:<b> <span>{user_text}<\span>
@@ -123,9 +130,9 @@ class TypeWindow(QWidget):
         self.reply_area.appendHtml(user_html)
      
 
-
+        #send() from chat_client
         try:
-            response= send(user_text, self.history, profile_id = "Elfie")
+            response= send_message_to_thread(user_text, self.history, profile_id = "Elfie")
             elfie_html = f"""
             <div style= "margin-bottom: 15px; font-family:'微軟正黑體 Light', 'Comic Sans MS'; font-size:15px; line-height: 1.3;">
                 <b>精靈:</b> <span>{response}<\span>
@@ -135,7 +142,7 @@ class TypeWindow(QWidget):
            
         
         except Exception as e:
-            self.reply_area.appendPlainText(f"[Error] {e}")
+            logging.error(f"[Error: Failed to handle send! ] {e}")
 
         self.input_box.clear()
 

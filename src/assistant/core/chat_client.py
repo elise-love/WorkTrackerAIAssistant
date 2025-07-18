@@ -1,5 +1,5 @@
 ﻿#chat_client
-from openai_client import run_assistant
+from core.openai_client import run_assistant
 
 def send(user_text: str, history: list[tuple[str, str]], profile_id: str = "Elfie") -> str:
     assistant_text = run_assistant(user_text)

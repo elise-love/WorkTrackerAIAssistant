@@ -31,7 +31,7 @@ def run_assistant(user_input: str) -> str:
             break
         elif run_status.status in ["failed", "cancelled", "expired"]:
             raise RuntimeError(f"Run failed with status: {run_status.status}")
-        time.sleep(0.5)
+        time.sleep(2)
 
     # 取得回覆
     messages = client.beta.threads.messages.list(thread_id=thread.id)
@@ -39,4 +39,4 @@ def run_assistant(user_input: str) -> str:
         if message.role == "assistant":
             return message.content[0].text.value
 
-    return "(No assistant reply found)"
+
