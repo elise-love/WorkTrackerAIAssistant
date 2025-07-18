@@ -36,4 +36,6 @@ MODEL_DEFAULT  = os.getenv("MODEL_DEFAULT", "gpt-4.1")
 
 TIMEOUT        = int(os.getenv("OPENAI_TIMEOUT", "30"))
 
-ASSISTANT_PROMPT_ID = os.getenv("ASSISTANT_PROMPT_ID", "")
+ASSISTANT_ID = os.getenv("ASSISTANT_ID", "")
+
+THREAD_ID = "thread_eLXbn0XwAhf82Sf8JjwVpLF6"

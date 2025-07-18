@@ -1,13 +1,42 @@
+# openai_client.py
 from openai import OpenAI
-client = OpenAI()
+from config import OPENAI_API_KEY, OPENAI_ORG_ID, ASSISTANT_ID, THREAD_ID
+import time
 
-def chat_completion(messages: list[dict], model: str, prompt_id: str = None) -> str:
-    kwargs = {
-        "model": model,
-        "messages": messages,
-    }
-    if prompt_id:
-        kwargs["prompt_id"] = prompt_id
+client = OpenAI(api_key=OPENAI_API_KEY, organization=OPENAI_ORG_ID)
 
-    response = client.chat.completions.create(**kwargs)
-    return response.choices[0].message.content
+def run_assistant(user_input: str) -> str:
+    # 建立一個新的 thread（避免用舊 thread）
+    thread = client.beta.threads.create()
+    
+    # 傳送訊息
+    client.beta.threads.messages.create(
+        thread_id=thread.id,
+        role="user",
+        content=user_input,
+    )
+
+    # 啟動 assistant
+    run = client.beta.threads.runs.create(
+        thread_id=thread.id,
+        assistant_id=ASSISTANT_ID,
+    )
+
+    while True:
+        run_status = client.beta.threads.runs.retrieve(
+            thread_id=thread.id,
+            run_id=run.id
+        )
+        if run_status.status == "completed":
+            break
+        elif run_status.status in ["failed", "cancelled", "expired"]:
+            raise RuntimeError(f"Run failed with status: {run_status.status}")
+        time.sleep(0.5)
+
+    # 取得回覆
+    messages = client.beta.threads.messages.list(thread_id=thread.id)
+    for message in reversed(messages.data):
+        if message.role == "assistant":
+            return message.content[0].text.value
+
+    return "(No assistant reply found)"

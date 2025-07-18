@@ -125,7 +125,7 @@ class TypeWindow(QWidget):
 
 
         try:
-            response, category  = send(user_text, self.history, profile_id = "Elfie")
+            response= send(user_text, self.history, profile_id = "Elfie")
             elfie_html = f"""
             <div style= "margin-bottom: 15px; font-family:'微軟正黑體 Light', 'Comic Sans MS'; font-size:15px; line-height: 1.3;">
                 <b>精靈:</b> <span>{response}<\span>
