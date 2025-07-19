@@ -6,11 +6,13 @@ import sys
 import os
 from core.assistant_client import send_message_to_thread
 import logging 
+
 logging.basicConfig(
     level = logging.INFO,
     format = '[%(astime)s [%(levelname)s] %(message)s',
     handler = [logging.StreamHandler()]
 )
+
 class TypeWindow(QWidget):
     def __init__(self):
         super().__init__()

@@ -18,7 +18,6 @@ def main():
 
 if __name__ =="__main__":
     init_db()
-
     while True:
         action = input("要執行什麼操作？(create / list / send / read)：").strip()
 

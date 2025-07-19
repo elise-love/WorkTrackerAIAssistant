@@ -56,9 +56,28 @@ def send_message_to_thread(thread_id: str, user_input: str) -> str:
             return "(Run failed)"
         time.sleep(1)
 
+    #count tokens
+    usage = run_status.usage
+    print(f"[Debug] usage object: {usage}")
+    input_tokens = getattr(usage, 'prompt_tokens', 0)
+    output_tokens = getattr(usage, 'completion_tokens', 0)
+    tokens_used = input_tokens + output_tokens
+    print(f"[Debug] Tokens used this run: {tokens_used}")
+
+    with connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE threads
+            SET token_usage = token_usage + ?
+            WHERE id =?
+        ''',(tokens_used, thread_id))
+        print(f"[Debug] Rows updated: {cursor.rowcount}")
+        conn.commit()
+
     # Get assistant reply
     messages = client.beta.threads.messages.list(thread_id=thread_id)
-    for message in reversed(messages.data):
+
+    for message in messages.data:
         if message.role == "assistant":
             return message.content[0].text.value
     return "(No assistant reply found)"
@@ -75,3 +94,13 @@ def read_thread_messages(thread_id: str):
         for block in content_blocks:
             if block.type == "text":
                 print(f"{prefix}:\n{block.text.value.strip()}\n")
+
+    with connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT token_usage FROM threads WHERE id =?", (thread_id,))
+        result = cursor.fetchone()
+        if result:
+            token_usage =result[0]
+            print(f"Tokens Used in Total: {token_usage}")
+        else:
+            print("Thread not found in database.")
