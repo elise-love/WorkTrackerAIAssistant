@@ -6,7 +6,7 @@ from db import init_db
 import sys
 import logging
 from db import init_db, list_threads
-
+ 
 logging.basicConfig(
     level=logging.ERROR,
     format='[%(asctime)s] [%(levelname)s] %(message)s',
@@ -78,7 +78,7 @@ if __name__ =="__main__":
                 read_thread_messages(read_thread_id)
 
             elif action == "4":
-            i    title = input("input chat theme...")
+                title = input("input chat theme...")
                 category = input("input category theme...")
                 thread_id = create_thread(title=title, category=category)
                 print(f"建立成功！thread_id: {thread_id}")
