@@ -30,6 +30,10 @@ def create_thread(title: str = "unnamed chat", category: str = "uncategorized") 
     return thread_id
 
 def send_message_to_thread(thread_id: str, user_input: str) -> str:
+    if not user_input.strip():
+        logging.warning("Failed to send: blank message")
+        return "(Error: Please enter non-empty messages)"
+    
     # Append user input to thread
     client.beta.threads.messages.create(
         thread_id=thread_id,
@@ -89,11 +93,11 @@ def read_thread_messages(thread_id: str):
     for msg in reversed(messages.data):
         role = msg.role
         content_blocks = msg.content
-        prefix = "User" if role == "user" else "Elfie"
+        prefix = "芍芍" if role == "user" else "精靈"
 
         for block in content_blocks:
             if block.type == "text":
-                print(f"{prefix}:\n{block.text.value.strip()}\n")
+                print(f"{prefix}: {block.text.value.strip()}\n")
 
     with connect() as conn:
         cursor = conn.cursor()
@@ -104,3 +108,5 @@ def read_thread_messages(thread_id: str):
             print(f"Tokens Used in Total: {token_usage}")
         else:
             print("Thread not found in database.")
+
+    print("\n\n")

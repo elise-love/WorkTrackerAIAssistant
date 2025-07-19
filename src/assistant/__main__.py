@@ -7,6 +7,11 @@ import sys
 import logging
 from db import init_db, list_threads
 
+logging.basicConfig(
+    level=logging.ERROR,
+    format='[%(asctime)s] [%(levelname)s] %(message)s',
+    handlers=[logging.StreamHandler()]
+)
 
 
 def main():
@@ -18,27 +23,74 @@ def main():
 
 if __name__ =="__main__":
     init_db()
+    current_thread = "thread_gWYQtMUDzCaOVevawWBHTjwe"
     while True:
-        action = input("要執行什麼操作？(create / list / send / read)：").strip()
+        if current_thread == "thread_gWYQtMUDzCaOVevawWBHTjwe":
+            print("Current Thread: Chat 1")
+        elif current_thread == "thread_ZeDc9lBLx03HWPSP2tnsQxZH":
+            print("Current Thread: daily_planning")
 
-        if action == "create":
-            title = input("input chat theme...")
-            category = input("input category theme...")
-            thread_id = create_thread(title=title, category=category)
-            print(f"建立成功！thread_id: {thread_id}")
-
-        elif action == "list":
-            list_threads()
-
-        elif action == "send":
-            thread_id = input("請輸入要傳送訊息的 thread_id：").strip()
-            message = input("請輸入你的訊息：").strip()
-            reply = send_message_to_thread(thread_id, message)
-            print(f"Assistant 回覆：\n{reply}")
-
-        elif action == "read":
-            thread_id = input("請輸入要查閱的 thread_id：").strip()
-            read_thread_messages(thread_id)
+        elif current_thread == "thread_W0wQgMj82xp7btUWMg8Zuy5f":
+            print("Current Thread: life_talk")
 
         else:
-            print("不支援的操作")
+            print("Current Thread: TestChatTheme1")
+
+        print("(type \ for instrunction)\n")
+
+        message = input("芍芍: ").strip()
+
+        if message == "\\":
+            action = input("Input number for instructions\n1: Change Thread\n2: List Threads\n3: Read Threat History\n4: Create Thread\n\nExecute: ")
+            print()
+
+            if action == "1":
+                new_thread_choice = input("Choose Thread:\n1: Chat1\n2: daily_planning\n3: life_talk\n4: TestChatTheme1\n\nExecute: ")
+                print()
+                if new_thread_choice =="1":
+                    current_thread = "thread_viYMHiRdWbF1uKul2pimdq2T"
+                elif new_thread_choice =="2":
+                    current_thread = "thread_ZeDc9lBLx03HWPSP2tnsQxZH"
+                elif new_thread_choice =="3":
+                    current_thread = "thread_W0wQgMj82xp7btUWMg8Zuy5f"
+                elif new_thread_choice =="4":
+                    current_thread = "thread_gWYQtMUDzCaOVevawWBHTjwe"
+                else:
+                    print("不支援的操作")
+                continue
+
+            elif action == "2":
+                list_threads()
+
+            elif action == "3":
+                read_thread = input("Read Thread:\n1: Chat1\n2: daily_planning\n3: life_talk\n4: TestChatTheme1\n\nExecute: ").strip()
+                if read_thread =="1":
+                    read_thread_id = "thread_viYMHiRdWbF1uKul2pimdq2T"
+                elif read_thread =="2":
+                    read_thread_id = "thread_ZeDc9lBLx03HWPSP2tnsQxZH"
+                elif read_thread =="3":
+                    read_thread_id = "thread_W0wQgMj82xp7btUWMg8Zuy5f"
+                elif read_thread =="4":
+                    read_thread_id = "thread_gWYQtMUDzCaOVevawWBHTjwe"
+                else:
+                    print("不支援的操作")
+                print()
+                read_thread_messages(read_thread_id)
+
+            elif action == "4":
+            i    title = input("input chat theme...")
+                category = input("input category theme...")
+                thread_id = create_thread(title=title, category=category)
+                print(f"建立成功！thread_id: {thread_id}")
+
+            else:
+                print("不支援的操作")
+
+        else:
+            reply = send_message_to_thread(current_thread, message)
+            print("-------------------------------------------------------------------------------------------------------")
+            print(f"精靈：\n{reply}")
+            print("-------------------------------------------------------------------------------------------------------")
+
+
+      
