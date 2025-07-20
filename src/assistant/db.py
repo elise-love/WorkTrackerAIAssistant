@@ -45,6 +45,24 @@ def list_threads():
             token_usage = row[3]
             print(f"{thread_title}\n分類: {thread_category}\nTokens:{token_usage}\nthread_id: {row[0]}\n")
 
+def get_thread_title_by_id(thread_id: str)->str:
+    with connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT title FROM threads WHERE id = ?",(thread_id,))
+        result = cursor.fetchone()
+        if result:
+            return result[0]
+        return "Unknown"
+
+def get_thread_id_by_title(thread_title: str)->str:
+    with connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id FROM threads WHERE title = ?",(thread_title))
+        result = cursor.fetchone()
+        if result:
+            return result[0]
+        return "Unknown"
+
 if __name__ == "__main__":
     init_db()
     list_threads()

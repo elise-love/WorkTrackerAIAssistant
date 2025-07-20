@@ -29,7 +29,7 @@ def create_thread(title: str = "unnamed chat", category: str = "uncategorized") 
     logging.info(f"New thread created: {thread_id}")
     return thread_id
 
-def send_message_to_thread(thread_id: str, user_input: str) -> str:
+def send(thread_id: str, user_input: str) -> str:
     if not user_input.strip():
         logging.warning("Failed to send: blank message")
         return "(Error: Please enter non-empty messages)"
