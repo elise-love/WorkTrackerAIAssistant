@@ -10,6 +10,7 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()]
 )
 
+
 def connect():
     return sqlite3.connect(DB_PATH)
 
@@ -34,16 +35,11 @@ def list_threads():
         cursor = conn.cursor()
         cursor.execute('''
            SELECT id, title, category, token_usage
-           FROM threads 
-           ORDER BY created_at DESC       
+           FROM threads
+           ORDER BY created_at DESC
         ''')
-        rows = cursor.fetchall()
-        print("\nThread List:\n")
-        for row in rows:
-            thread_title = row[1] or "(Untitled)"
-            thread_category = row[2] or "(Uncategorized)"
-            token_usage = row[3]
-            print(f"{thread_title}\n分類: {thread_category}\nTokens:{token_usage}\nthread_id: {row[0]}\n")
+        return cursor.fetchall()  #只回傳資料
+
 
 def get_thread_title_by_id(thread_id: str)->str:
     with connect() as conn:

@@ -32,7 +32,7 @@ class TypeWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setFixedSize(600,450)
+        self.setFixedSize(800,600)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowFlags(Qt.FramelessWindowHint)
 
@@ -68,7 +68,7 @@ class TypeWindow(QWidget):
         self.reply_area.setReadOnly(True)
         self.reply_area.setFixedSize(540,250)
         self.reply_area.setStyleSheet("""
-            background-color: transparent;
+            background-color: white;
             border: none;
             font-family: '微軟正黑體 Light';
             font-size:16px;
@@ -83,7 +83,7 @@ class TypeWindow(QWidget):
         self.input_box.setFixedSize(550,73)
         self.input_box.setStyleSheet("""
             QTextEdit{
-                background-color: transparent;
+                background-color: white;
                 border: none;
                 font-family: 'Comic Sans MS';
                 font-size: 15px;
@@ -140,6 +140,12 @@ class TypeWindow(QWidget):
     def mouseReleaseEvent(self, e):
         self.mouse_is_dragging = False
 
+    #show commend response on gui
+    def show_info(self, message:str):
+        self.reply_area.appendHtml(f"""
+            <div style='color: black; font-style:italic; font-size:30px; margin:20px 0;'>{message}</div>
+        """)
+
     @staticmethod
     def get_thread_id_by_name(name: str):
         return THREAD_NAME_ID_MAP.get(name)
@@ -157,9 +163,7 @@ class TypeWindow(QWidget):
     def switch_thread(self, thread_id):
         self.current_thread_id = thread_id
         thread_name = get_thread_title_by_id(thread_id)
-        self.reply_area.appendHtml(f"""
-            <div style='color:gray; font-style:italic; font-size: 13px; margin:10px 0;'>[Switched to: {thread_name} 🌼 :))]</div>
-        """)
+        self.show_info("[Switched to: {thread_name} 🌼 :))]")
 
     def switch_thread_prompt(self):
         read_thread = input("Switch to Thread:\n1: Chat1\n2: daily_planning\n3: life_talk\n4: TestChatTheme1\n\nExecute: ").strip()
@@ -172,12 +176,12 @@ class TypeWindow(QWidget):
         elif read_thread == "4":
             self.switch_thread("thread_gWYQtMUDzCaOVevawWBHTjwe")
         else:
-            print("Invalid option.")
+            self.show_info("[Invalid option 🌼 :))]")
 
     def show_thread_history(self):
         try: 
             messages = read_thread_messages(self.current_thread_id)
-            self.reply_area.appendPlainText("--------------History--------------")
+            self.show_info("--------------History--------------")
             for msg in messages:
                 if msg['role']== "user":
                     self.reply_area.appendPlainText(f"我: {msg['content']}")
@@ -191,16 +195,23 @@ class TypeWindow(QWidget):
         num_choice = input("Read Thread:\n1: Chat1\n2: daily_planning\n3: life_talk\n4: TestChatTheme1\n\nExecute: ").strip()
         read_thread_id = THREAD_NUM_ID_MAP.get(num_choice)
         if not read_thread_id:
-            print("Invalid thread number!")
-            return
-        print()
-        print(f"Here are converastion logs from {get_thread_title_by_id(read_thread_id)} 🍓🍒❣️: ")
+            self.show_info("[Invalid thread number!]")
+
+        self.show_info("\n")
+        self.show_info(f"[🍓🍒❣️ Conversation logs from <b>{get_thread_title_by_id(read_thread_id)}]")
+
         read_thread_messages(read_thread_id)
 
     def create_thread_prompt(self):
         try:
-            title = input("input chat title...\n")
-            num_choice = input("Choose its category: \n1: Chat1 2: daily_planning 3: life_talk\n")
+            #input new title
+            self.show_info("Input new thread title:")         
+            title = self.input_box.toPlainText().strip()
+
+            #choose category
+            self.show_info("Choose its category: \n1: Chat1 2: daily_planning 3: life_talk\n")  
+            
+            num_choice = self.input_box.toPlanText().stip()
             if num_choice =="1":
                 category = "Chat"
             if num_choice =="2":
@@ -208,37 +219,112 @@ class TypeWindow(QWidget):
             if num_choice =="3":
                 category = "life_talk"
             else:
-                print(f"Unsupported Input! 😧")
+                self.show_info("[Unsupported Input! 😧]")
                 return
 
             thread_id = create_thread(title=title, category=category)
-            print(f"建立成功！Title: {title}\nthread_id: {thread_id}")
+            self.show_info(f"[Created Successfully ✅\nTitle: {title}\nThread ID: {thread_id}]")        
+
         except Exception as e:
             logging.error(f"[Error] failed to create thread {e}")
-            print("Failed to create thread")
+            self.show_info("[Failed to create thread\n]")
 
     def handle_user_commend(self, user_input: str):
-        if user_input !="\\":
-            return False
-        
-        action = input("Input number for instructions\n1: Change Thread\n2: List Threads\n3: Read Thread Histories\n4: Create Thread\n\nExecute: ")
-        print()
-        if action == "1":
-            self.switch_thread_prompt()
-        elif action == "2":
-            list_threads()
-        elif action == "3":
-            self.read_thread_prompt()
-        elif action == "4":
-            self.create_thread_prompt()
-        else:
-            print("Unsupported Input!")
+        cmd = user_input.strip().lower()
 
-        return True
+        #list thread commend
+        if cmd == "\\list":
+            try:
+                threads = list_threads()
+                if not threads:
+                    self.show_info("[Thread List 是空的或讀取失敗 🫠]")
+                    return True
+
+                self.show_info("[Thread List 📜]")
+                for idx, row in enumerate(threads, start=1):
+                    thread_title = row[1] or "(Untitled)"
+                    thread_category = row[2] or "(Uncategorized)"
+                    token_usage = row[3]
+                    thread_id = row[0]
+                    self.show_info(f"{idx}. {thread_title}｜分類: {thread_category}｜Tokens: {token_usage}｜ID: {thread_id}")
+            except Exception as e:
+                logging.error(f"[Error in \\list] {e}")
+                self.show_info("[⚠️ 發生錯誤，無法列出 threads]")
+            return True
+
+
+        #switch thread commend
+        elif cmd.startswith("\\switch"):
+            parts = cmd.split()
+            if len(parts) < 2:
+                self.show_info("[請輸入 thread 編號，如：\\switch 2]")
+                self.show_info("(目前可用編號如下：)")
+                for idx, (title, tid) in enumerate(THREAD_NAME_ID_MAP.items(), start=1):
+                    self.show_info(f"{idx}. {title}  ➤  {tid}")
+                return True
+
+            thread_index = parts[1]
+            thread_id = THREAD_NUM_ID_MAP.get(thread_index)
+            if thread_id:
+                self.switch_thread(thread_id)
+            else:
+                self.show_info("[Invalid thread number! ❌]")
+            return True
+
+        #read thread commend
+        elif cmd.startswith("\\read"):
+            parts = cmd.split()
+            if len(parts) < 2:
+                self.show_info("[請輸入 thread 編號，如：\\read 3]")
+                self.show_info("(目前可用編號如下：)")
+                for idx, (title, tid) in enumerate(THREAD_NAME_ID_MAP.items(), start=1):
+                    self.show_info(f"{idx}. {title}  ➤  {tid}")
+                return True
+
+            thread_index = parts[1]
+            thread_id = THREAD_NUM_ID_MAP.get(thread_index)
+            if not thread_id:
+                self.show_info("[Invalid thread number! ❌]")
+                return True
+
+            try:
+                self.show_info(f"📖 [Reading from {get_thread_title_by_id(thread_id)}]")
+                messages = read_thread_messages(thread_id)
+                for msg in messages:
+                    if msg["role"] == "user":
+                        self.reply_area.appendPlainText(f"我: {msg['content']}")
+                    elif msg["role"] == "assistant":
+                        self.reply_area.appendPlainText(f"精靈: {msg['content']}")
+            except Exception as e:
+                logging.error(f"[Error reading thread :((] {e}")
+                self.show_info("[讀取失敗]")
+            return True
+
+        #create thread command
+        elif cmd.startswith("\\create"):
+            parts = cmd.split(maxsplit=2)
+            if len(parts) < 3:
+                self.show_info("[請輸入格式：\\create 標題 分類]\nEx: \\create 測試 daily_planning")
+                return True
+
+            title = parts[1]
+            category = parts[2]
+
+            try:
+                thread_id = create_thread(title=title, category=category)
+                self.show_info(f"[Created ✅ Title: {title} | ID: {thread_id}]")
+            except Exception as e:
+                logging.error(f"[Create Error] {e}")
+                self.show_info("[Failed to create :(((]")
+            return True
+
+        return False
+
             
     
     def handle_send(self):
         user_input = self.input_box.toPlainText().strip()
+        print(f"[DEBUG] 使用者輸入: {user_input}")
         if self.handle_user_commend(user_input):
             return
 
