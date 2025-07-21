@@ -66,34 +66,38 @@ class TypeWindow(QWidget):
         self.reply_area = QPlainTextEdit(self)
         self.reply_area.setPlainText("")
         self.reply_area.setReadOnly(True)
-        self.reply_area.setFixedSize(540,250)
+        self.reply_area.setFixedSize(748,370)
         self.reply_area.setStyleSheet("""
-            background-color: white;
+            background-color: transparent;
             border: none;
+            border-radius:15px;
             font-family: '微軟正黑體 Light';
             font-size:16px;
             color: rgba(0,0,0,150);
             line-height: 150%;
+            margin: 2px;
         """)
-        self.reply_area.setGeometry(26,78,550,73)
+        self.reply_area.setGeometry(25,80,748,370)
 
         #input box
         self.input_box = QTextEdit(self)
         self.input_box.setPlaceholderText("")
-        self.input_box.setFixedSize(550,73)
+        self.input_box.setFixedSize(753,108)
         self.input_box.setStyleSheet("""
             QTextEdit{
-                background-color: white;
+                background-color: transparent;
                 border: none;
+                border-radius: 15px;
                 font-family: 'Comic Sans MS';
                 font-size: 15px;
+                margin: 5px;
             }
         """)
-        self.input_box.setGeometry(23,353,550,73)
+        self.input_box.setGeometry(20,465,753,108)
 
         #send button
         self.send_button = QPushButton("Send", self)
-        self.send_button.setFixedSize(60,30)
+        self.send_button.setFixedSize(65,35)
         '''
         self.send_button.setStyleSheet("""
             border-radius: 5px;
@@ -102,9 +106,10 @@ class TypeWindow(QWidget):
             background-color: rgba(190, 160, 206, 206);
             font-family: 'Comic Sans MS';
             font-weight: bold;
+            font-size: 20px;
         """)
         '''
-        self.send_button.move(510,390)
+        self.send_button.move(685,530)
         self.send_button.clicked.connect(self.handle_send)
 
         #thread
@@ -116,8 +121,26 @@ class TypeWindow(QWidget):
         self.thread_selector.addItem("Daily Planning", "thread_ZeDc9lBLx03HWPSP2tnsQxZH")
         self.thread_selector.addItem("heart 2 heart", "thread_W0wQgMj82xp7btUWMg8Zuy5f")
         self.thread_selector.addItem("Test and Debug", "thread_gWYQtMUDzCaOVevawWBHTjwe")
-        self.thread_selector.setGeometry(20,20,200,30)
+        self.thread_selector.setGeometry(28,530,200,30)
         self.thread_selector.currentIndexChanged.connect(self.on_thread_selected)
+        self.thread_selector.setStyleSheet("""
+            QComboBox{
+                background-color: rgba(225, 180, 239, 0);
+                border-radius: 10px;
+                font-size: 17px;
+                color: black;
+                font-family: 'Arial';
+                text-align: center;
+            }
+            QComboBox QAbstractItemView {
+                background-color: rgba(255, 255, 255, 150);;
+                border: 1px solid #B0A8B9;
+                selection-background-color: rgba(225, 180, 239, 220);
+                margin: 5px;
+                font-size: 17px;
+                text-align: center;
+            }
+        """)
 
     def update_background(self):
         if not self.pixmap.isNull():

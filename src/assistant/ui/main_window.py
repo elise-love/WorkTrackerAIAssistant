@@ -14,7 +14,7 @@ logging.basicConfig(
 )
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, show_type_window = False):
         super().__init__()
         logging.debug("MainWindow Initializing")
 
@@ -59,7 +59,8 @@ class MainWindow(QMainWindow):
             logging.error(f"Error while loading elfie icon：{e}")
         #type-icon setup
         self.type_window = TypeWindow()
-        self.type_window_display = False
+        if show_type_window:
+            self.type_window.show()
         self.type_icon = ClickableLabel(self, double_click_callback = self.toggle_typeWindow)
         self.type_icon.setGeometry(215, 600,  100, 100)
 
@@ -122,6 +123,8 @@ class MainWindow(QMainWindow):
 
 
     def toggle_typeWindow(self):
+        if self.type_window is None:
+            self.type_window = TypeWindow()
         if not self.type_window_display:
             self.type_window.show()
             logging.debug("lauched type window")

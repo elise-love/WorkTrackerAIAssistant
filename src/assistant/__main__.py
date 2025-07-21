@@ -17,7 +17,7 @@ logging.basicConfig(
 def main():
     logging.info("Start Application")
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = MainWindow(show_type_window = True)
     window.show()
     init_db()
     sys.exit(app.exec_())
